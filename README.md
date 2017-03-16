@@ -1,6 +1,29 @@
-This is an instance of setup for
-- Express is a framework for building web applications on top of Node.js. It simplifies the server creation process that is already available in Node. In case you were wondering, Node allows you to use JavaScript as your server-side language.
-- MongoDB is a database. This is the place where you store information for your web websites (or applications).
-- CRUD is an acronym for Create, Read, Update and Delete. It is a set of operations we get servers to execute (POST, GET, PUT and DELETE respectively). This is what each operation does
+Primary setup with linkages between backend, frontend and database completed.
 
-Browser<-------CRUD--------->Server<-------------------->Database
+Implements CRUD functionalities for crops, mandis and contacts.
+
+File structure is defined here
+-- public (controllers come here)
+----- index.ejs (single page)
+----- config.js
+----- main.js 
+-- node_modules
+----- angular-material
+----- body-parser
+----- ejs
+----- mongodb
+----- express
+----- ...
+-- package.json
+-- server.js
+-- views (all front end views come here)
+----- index.ejs (for testing)
+----- project
+--------- crops
+--------- mandis
+--------- contacts
+--------- ...
+----- sales
+--------- ...
+-- node (all files supporting server.js)
+

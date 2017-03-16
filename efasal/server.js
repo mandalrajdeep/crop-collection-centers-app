@@ -21,6 +21,7 @@ MongoClient.connect('mongodb://efasal:pastor%40321@cluster0-shard-00-00-84sxp.mo
     console.log('listening on 3000')
   })
 })
+
 /*
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
@@ -32,11 +33,56 @@ app.get('/', (req, res) => {
 })
 */
 
+app.get('/project/crops', (req, res) => {
+  db.collection('project.crops').find().toArray((err, result) => {
+    if (err) return console.log(err)
+    // renders project-crops-index.ejs
+    res.render('project/crops/index.ejs', {crops: result})
+  })
+})
+
+//add server checks
+app.post('/project/crops', (req, res) => {
+  console.log(req.body)
+  db.collection('project.crops').save(req.body, (err, result) => {
+    if (err) return console.log(err)
+
+    console.log('crops saved to database')
+    res.redirect('/project/crops')
+  })
+})
+
+app.get('/project/mandis', (req, res) => {
+  db.collection('project.mandis').find().toArray((err, result) => {
+    if (err) return console.log(err)
+    // renders project-crops-index.ejs
+    res.render('project/mandis/index.ejs', {mandis: result})
+  })
+})
+
+app.post('/project/mandis', (req, res) => {
+  db.collection('project.mandis').save(req.body, (err, result) => {
+    if (err) return console.log(err)
+
+    console.log('mandis saved to database')
+    res.redirect('/project/mandis')
+  })
+})
+
 app.get('/', (req, res) => {
   db.collection('quotes').find().toArray((err, result) => {
     if (err) return console.log(err)
     // renders index.ejs
     res.render('index.ejs', {quotes: result})
+  })
+})
+
+/*
+app.get('/portal', (req, res) => {
+  db.collection('quotes').find().toArray((err, result) => {
+    if (err) return console.log(err)
+    // renders index.ejs
+    res.render('mayur.ejs', {quotes: result})
   })
 })
 
@@ -73,3 +119,5 @@ app.delete('/quotes', (req, res) => {
 	    res.send('A darth vadar quote got deleted')
 	  })
 })
+
+*/
