@@ -4,7 +4,7 @@ module.exports = function(app, passport) {
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
-        res.render('index.ejs'); // load the index.ejs file
+        res.render('../index.html'); // load the index.ejs file
     });
 
     // =====================================
@@ -59,6 +59,12 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
+
+    app.get('/crop', function(req, res) {
+
+        // render the page and pass in any flash data if it exists
+        res.render('crop.ejs', { message: req.flash('loginMessage') }); 
+    });
 };
 
 // route middleware to make sure a user is logged in
@@ -71,3 +77,5 @@ function isLoggedIn(req, res, next) {
     // if they aren't redirect them to the home page
     res.redirect('/');
 }
+
+

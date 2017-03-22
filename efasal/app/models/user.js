@@ -2,30 +2,34 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
-// define the schema for our user model
+// define the schema for user model
 var userSchema = mongoose.Schema({
 
     local            : {
-        email        : String,
-        password     : String,
+        email        : {type: String, required: true, trim: true, unique: true},
+        password     : {type: String, required: true, trim: true},
+        access       : {type: String, default: 'admin', enum: ['Admin', 'eFasal', 'Buyer', 'Farmer', 'ASP', 'CCD', 'Agent', 'Visitor']}
     },
     facebook         : {
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        name         : String,
+        access       : {type: String, default: 'admin', enum: ['Admin', 'eFasal', 'Buyer', 'Farmer', 'ASP', 'CCD', 'Agent', 'Visitor']}
     },
     twitter          : {
         id           : String,
         token        : String,
         displayName  : String,
-        username     : String
+        username     : String,
+        access       : {type: String, default: 'admin', enum: ['Admin', 'eFasal', 'Buyer', 'Farmer', 'ASP', 'CCD', 'Agent', 'Visitor']}
     },
     google           : {
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        name         : String,
+        access       : {type: String, default: 'admin', enum: ['Admin', 'eFasal', 'Buyer', 'Farmer', 'ASP', 'CCD', 'Agent', 'Visitor']}
     }
 
 });
