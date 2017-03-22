@@ -1,4 +1,4 @@
-Login Implemented, Frontend needs to change. File structure redefined.
+This is a development module - efasal directory has been declared as the root.
 
 File structure is defined here
 - app
