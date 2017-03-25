@@ -1,57 +1,58 @@
-// set up ======================================================================
-// get all the tools we need
-var express  = require('express');
-var app      = express();
-var port     = process.env.PORT || 8080;
-var mongoose = require('mongoose');
-var passport = require('passport');
-var flash    = require('connect-flash');
+// eFasal Application
 
-var morgan       = require('morgan');
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 8080;
+
 var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
+var session = require('express-session');
+var morgan = require('morgan');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var passport = require('passport');
+var flash = require('connect-flash');
+// var cors = require('cors');
+var mongoStore = require('connect-mongo')(session);
 
 var configDB = require('./config/database.js');
+mongoose.connect(configDB.url);
+require('./config/passport')(passport);
 
-// configuration ===============================================================
-mongoose.connect(configDB.url); // connect to our database
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(session({secret: 'anystringoftext',
+				 saveUninitialized: true,
+				 resave: true,
+				 store: new mongoStore({ mongooseConnection: mongoose.connection,
+				 							ttl: 2 * 24 * 60 * 60  //time to live
+})}));
 
-require('./config/passport')(passport); // pass passport for configuration
-
-// set up our express application
-app.use(morgan('dev')); // log every request to the console
-app.use(cookieParser()); // read cookies (needed for auth)
-// get information from html forms
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
-//keep public as root for deployment
-//app.use(express.static(__dirname + '/public'));
-
-//for development efasal as root directory
-app.use(express.static(__dirname));
-
-app.set('views', './public/views')
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html'); // set up ejs for templating
-
-// required for passport
-app.use(session({
-    secret: 'cookie_secret',
-    resave: true,
-    saveUninitialized: true
-}));
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(passport.session()); //passport uses the same session
+app.use(flash());
 
-// routes ======================================================================
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+app.set('view engine', 'ejs');
+app.set('views', './public/views/');
 
-// launch ======================================================================
+var auth = express.Router();
+require('./app/routes/auth.js')(auth, passport);
+app.use('/auth', auth);
+
+var api = express.Router();
+require('./app/routes/api.js')(api, passport);
+app.use('/api', api);
+
+var crop = express.Router();
+require('./app/routes/crop.js')(crop, passport);
+app.use('/crop', crop);
+
+var secure = express.Router();
+require('./app/routes/secure.js')(secure, passport);
+app.use('/', secure);
+
 app.listen(port);
-console.log('The magic happens on port ' + port);
-console.log('xxx '+__dirname);
+console.log('Server running on port: ' + port);
+
+
+

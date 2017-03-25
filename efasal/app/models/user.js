@@ -1,49 +1,71 @@
 // load the things we need
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
+var randtoken = require('rand-token');
 
+var Schema = mongoose.Schema;
 // define the schema for user model
 var userSchema = mongoose.Schema({
 
-    local            : {
-        email        : {type: String, required: true, trim: true, unique: true},
+local : {
+        username     : {type: String, required: true, trim: true, unique: true},
         password     : {type: String, required: true, trim: true},
-        access       : {type: String, default: 'admin', enum: ['Admin', 'eFasal', 'Buyer', 'Farmer', 'ASP', 'CCD', 'Agent', 'Visitor']}
+        role         : {type: String, default: 'Admin', 
+		enum: ['admin', 'operations', 'sales', 'agents']}
     },
-    facebook         : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String,
-        access       : {type: String, default: 'admin', enum: ['Admin', 'eFasal', 'Buyer', 'Farmer', 'ASP', 'CCD', 'Agent', 'Visitor']}
-    },
-    twitter          : {
-        id           : String,
-        token        : String,
-        displayName  : String,
-        username     : String,
-        access       : {type: String, default: 'admin', enum: ['Admin', 'eFasal', 'Buyer', 'Farmer', 'ASP', 'CCD', 'Agent', 'Visitor']}
-    },
-    google           : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String,
-        access       : {type: String, default: 'admin', enum: ['Admin', 'eFasal', 'Buyer', 'Farmer', 'ASP', 'CCD', 'Agent', 'Visitor']}
-    }
-
+token : {
+        type: Schema.Types.ObjectId,
+        ref: 'Token',
+        default: null
+	}
+},
+{
+	timestamps: true
 });
 
-// methods ======================
-// generating a hash
-userSchema.methods.generateHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
+var tokenSchema = mongoose.Schema({
+	value: String,
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: 'User'
+	},
+	expireAt: {
+		type: Date,
+		expires: 7 * 24 * 60 * 60,
+		default: Date.now
+	}
+});
 
-// checking if password is valid
-userSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.local.password);
-};
+// this function generates the token, 
+// then saves it with the user and saves the token
+
+// methods ======================
+userSchema.methods.generateToken = function(){
+	var token = new Token();
+	token.value = randtoken.generate(32);
+	token.user = this._id;
+	this.token = token._id;
+	this.save(function(err){
+		if(err)
+			throw err;
+		token.save(function(err){
+			if(err)
+				throw err;
+		});
+	});
+}
+
+userSchema.methods.generateHash = function(password){
+	return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
+}
+
+userSchema.methods.validPassword = function(password){
+	return bcrypt.compareSync(password, this.local.password);
+}
 
 // create the model for users and expose it to our app
-module.exports = mongoose.model('User', userSchema);
+var User = mongoose.model('User', userSchema);
+var Token = mongoose.model('Token', tokenSchema);
+var Models = { User: User, Token: Token };
+
+module.exports = Models;
