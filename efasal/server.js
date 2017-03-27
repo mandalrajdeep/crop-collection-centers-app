@@ -15,12 +15,15 @@ var flash = require('connect-flash');
 var mongoStore = require('connect-mongo')(session);
 
 var configDB = require('./config/database.js');
-mongoose.connect(configDB.url);
+
+//autoIndex to False in Production
+mongoose.connect(configDB.url, { config: { autoIndex: true } });
 require('./config/passport')(passport);
 
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(session({secret: 'anystringoftext',
 				 saveUninitialized: true,
 				 resave: true,
@@ -46,6 +49,14 @@ app.use('/api', api);
 var crop = express.Router();
 require('./app/routes/crop.js')(crop, passport);
 app.use('/crop', crop);
+
+var contact = express.Router();
+require('./app/routes/contact.js')(contact, passport);
+app.use('/contact', contact);
+
+var mandi = express.Router();
+require('./app/routes/mandi.js')(mandi, passport);
+app.use('/mandi', mandi);
 
 var secure = express.Router();
 require('./app/routes/secure.js')(secure, passport);

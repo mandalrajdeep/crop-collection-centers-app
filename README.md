@@ -1,18 +1,30 @@
-Login Implemented, Frontend needs to change. File structure redefined.
+Backend & Frontend Files need to merge now.
+Frontend code - Completed Modules: Crop, Partially Completed: Mandi, Contact
+Backend code - Completed Modules: Login, Crop, Contact, Partially Completed: Mandi
+File structure finalized. Front end code not aligned with backend in this push.
 
 File structure is defined here
 - app
 ------ models
----------- user.js  <!-- our user model -->
------- routes.js    <!-- all the routes for our application -->
+---------- user.js
+---------- crop.js
+---------- contact.js
+---------- mandi.js (working)
+------ routes
+---------- api.js (not used)
+---------- auth.js
+---------- crop.js
+---------- contact.js
+---------- mandi.js
+---------- secure.js
+------ functions (temporary)
 - config
------- auth.js      <!-- will hold all our client secret keys (facebook, twitter, google) -->
------- database.js  <!-- will hold our database connection settings -->
------- passport.js  <!-- configuring the strategies for passport -->
-- views
------- index.ejs    <!-- show our home page with login links -->
------- login.ejs    <!-- show our login form -->
------- signup.ejs   <!-- show our signup form -->
------- profile.ejs  <!-- after a user logs in, they will see their profile -->
-- package.json      <!-- handle our npm packages -->
-- server.js         <!-- setup our application -->
+---------- auth.js
+---------- config.js
+---------- database.js
+---------- passport.js
+---------- roles.js (not used)
+- node_modules
+(list of files)
+- server.js
+- package.json

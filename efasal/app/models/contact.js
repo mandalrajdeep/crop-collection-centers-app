@@ -1,22 +1,6 @@
 // load the things we need
 var mongoose = require('mongoose');
 
-// define the schema for phone numbers model
-var phoneSchema = mongoose.Schema({
-
-    type        : {type: String, enum: ['Work', 'Home', 'Other']},
-    value       : {type: String, trim: true}
-
-});
-
-// define the schema for emails model
-var emailSchema = mongoose.Schema({
-
-    type        : {type: String, enum: ['Work', 'Personal', 'Other']},
-    value       : {type: String, trim: true, lowercase: true}
-
-});
-
 // define the schema for location model
 var contactSchema = mongoose.Schema({
 
@@ -25,13 +9,31 @@ var contactSchema = mongoose.Schema({
     	job_title		: {type: String, trim: true},
     	organization	: {type: String, trim: true}
     			},
-    phone 		: [phoneSchema],
-    email 		: [emailSchema],
-    address 	: {locationSchema} 
+    phone 		: [{
+            label        : {type: String, enum: ['work', 'home', 'other']},
+            value       : {type: String, trim: true}
+
+    }],
+    email 		: [{
+            label       : {type: String, enum: ['work', 'personal', 'other']},
+            value       : {type: String, trim: true, lowercase: true}
+    }],
+    address 	: {
+            name        : {type: String, required: true, trim: true},
+            type        : {type: String, required: true, enum: ['village', 'town', 'city']},
+            locality    : {type: String, trim: true},
+            district    : {type: String, trim: true},
+            state       : {type: String, required: true, default: 'Madhya Pradesh', enum: ['Delhi', 'Madhya Pradesh', 'Maharashtra', 'Karnataka']},
+            country     : {type: String, required: true, default: 'India', enum: ['India', 'Bangaldesh']},
+            pin         : {type: String, required: true, trim: true}
+            } 
+},
+{
+	timestamps: true
 });
 
 
 // methods ======================
 
 // create the model for location and expose it to the app
-module.exports = mongoose.model('Location', locationSchema);
+module.exports = mongoose.model('Contact', contactSchema);
