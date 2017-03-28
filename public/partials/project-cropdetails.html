@@ -1,0 +1,38 @@
+<div layout="column" class="container" flex>
+	<div layout="row" layout-align="center center" flex><h3>Crop details</h3></div>
+	<div ng-init="loadDetails()">
+
+		<div layout="row">
+			<div layout="row" flex>
+				<md-button ng-click="Backtocrop('going back to crop list ...')">Back to Crop</md-button>
+			</div>
+			<div layout="row" layout-align="end center">
+				<md-button class="md-raised md-primary" ng-click="gotoEdit('let go to  edit ....')">Edit</md-button>
+			</div>
+		</div>
+
+		<div layout="row">
+			<div class="cropDetails1" flex="40">Crop name</div>
+			<div  class="cropDetails" flex>{{item.name}}</div>
+		</div>
+
+		<div layout="row">
+			<div class="cropDetails1" flex="40">Variety </div>
+			<div class="cropDetails" flex>{{item.variety}}</div>
+		</div>
+
+		<div layout="row">
+			<div class="cropDetails1" flex="40">Notes </div>
+			<div class="cropDetails" flex>{{item.notes}}</div>
+		</div>
+
+		<div layout="row">
+			<div class="cropDetails1" flex="40">Parameters</div>
+		</div>
+		<div layout="row" ng-repeat="(key, value) in item.parameters">
+			<div class="cropDetails1" flex="40">{{key}} </div>
+			<div class="cropDetails" flex>{{value}}</div>
+		</div>
+
+	</div>
+</div>
