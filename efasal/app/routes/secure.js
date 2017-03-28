@@ -5,6 +5,7 @@ module.exports = function(router, passport){
 
 	router.use(function(req, res, next){
 		if(req.isAuthenticated()){
+			console.log("Check Login");
 			return next();
 		}
 		res.redirect('/auth');
@@ -14,6 +15,10 @@ module.exports = function(router, passport){
 		User.findOne({ _id: req.user._id }).populate('token').exec(function(err, user){
 			res.render('profile.ejs', { user: user });
 		});
+	});
+
+	router.get('/home', function(req, res){
+		res.render('home.ejs');
 	});
 
 	router.get('/getToken', function(req, res){
@@ -26,7 +31,8 @@ module.exports = function(router, passport){
 	});
 
 	router.get('/*', function(req, res){
-		res.redirect('/profile');
+		console.log('Danger');
+		res.redirect('/index.ejs');
 	})
 
 };

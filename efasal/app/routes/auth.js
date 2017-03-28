@@ -1,12 +1,12 @@
 module.exports = function(router, passport){
 	//localhost:8080/auth/
 	router.get('/', function(req, res){
-		res.render('index.ejs');
+		res.render('auth/index.ejs');
 	});
 	
 	//localhost:8080/auth/login
 	router.get('/login', function(req, res){
-		res.render('login.ejs', { message: req.flash('loginMessage') });
+		res.render('auth/login.ejs', { message: req.flash('loginMessage') });
 	});
 
 	router.post('/login', passport.authenticate('local-login', {
@@ -17,7 +17,7 @@ module.exports = function(router, passport){
 
 	//localhost:8080/auth/signup
 	router.get('/signup', function(req, res){
-		res.render('signup.ejs', { message: req.flash('signupMessage') });
+		res.render('auth/signup.ejs', { message: req.flash('signupMessage') });
 	});
 
 	router.post('/signup', passport.authenticate('local-signup', {

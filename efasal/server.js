@@ -35,8 +35,11 @@ app.use(passport.initialize());
 app.use(passport.session()); //passport uses the same session
 app.use(flash());
 
+app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
-app.set('views', './public/views/');
+app.set('views', './public/views');
+// app.engine('html', require('ejs').renderFile); //for rendering html files
+
 
 var auth = express.Router();
 require('./app/routes/auth.js')(auth, passport);
@@ -46,17 +49,17 @@ var api = express.Router();
 require('./app/routes/api.js')(api, passport);
 app.use('/api', api);
 
-var crop = express.Router();
-require('./app/routes/crop.js')(crop, passport);
-app.use('/crop', crop);
+// var crop = express.Router();
+// require('./app/routes/crop.js')(crop, passport);
+// app.use('/crop', crop);
 
-var contact = express.Router();
-require('./app/routes/contact.js')(contact, passport);
-app.use('/contact', contact);
+// var contact = express.Router();
+// require('./app/routes/contact.js')(contact, passport);
+// app.use('/contact', contact);
 
-var mandi = express.Router();
-require('./app/routes/mandi.js')(mandi, passport);
-app.use('/mandi', mandi);
+// var mandi = express.Router();
+// require('./app/routes/mandi.js')(mandi, passport);
+// app.use('/mandi', mandi);
 
 var secure = express.Router();
 require('./app/routes/secure.js')(secure, passport);

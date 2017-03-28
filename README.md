@@ -1,4 +1,4 @@
-Backend & Frontend Files need to merge now.
+Backend & Frontend Files need to merge now. More changes done
 Frontend code - Completed Modules: Crop, Partially Completed: Mandi, Contact
 Backend code - Completed Modules: Login, Crop, Contact, Partially Completed: Mandi
 File structure finalized. Front end code not aligned with backend in this push.
@@ -28,3 +28,4 @@ File structure is defined here
 (list of files)
 - server.js
 - package.json
+- public (to be declared)
