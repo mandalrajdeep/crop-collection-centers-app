@@ -1,0 +1,74 @@
+Backend & Frontend Files need to merge now. More changes done
+Frontend code - Completed Modules: Crop, Partially Completed: Mandi, Contact
+Backend code - Completed Modules: Login, Crop, Contact, Partially Completed: Mandi
+File structure finalized. Front end code not aligned with backend in this push.
+
+File structure is defined here
+- app
+------ models
+---------- user.js
+---------- crop.js
+---------- contact.js
+---------- mandi.js (working)
+------ routes
+---------- api.js (not used)
+---------- auth.js
+---------- crop.js
+---------- contact.js
+---------- mandi.js
+---------- secure.js
+------ functions (temporary)
+- config
+---------- auth.js
+---------- config.js
+---------- database.js
+---------- passport.js
+---------- roles.js (not used)
+- node_modules
+(list of files)
+- server.js
+- package.json
+- public (to be declared)
+------ css
+---------- custom.css
+------ js
+---------- controllers
+----------------addCropCtrl.js
+----------------cropDetailsCtrl.js
+----------------editCropCtrl.js
+----------------footerCtrl.js
+----------------HomeCtrl.js
+----------------main.js
+----------------mainCtrl.js
+----------------page1Controller.js
+----------------projectCtrl.js
+----------------salesCtrl.js
+----------------sidenavCtrl.js
+---------- services
+----------------sharedServices.js
+---------- app.js
+---------- core.js
+------ libs
+------ partials
+----------------1.html
+----------------2.html
+----------------contact.html
+----------------mainview.html
+----------------mandi.html
+----------------page1.html
+----------------page2.html
+----------------project-addcrop.html
+----------------project-contact.html
+----------------project-crop.html
+----------------project-cropdetails.html
+----------------project-editcrop.html
+----------------project-mandi.html
+----------------project.html
+----------------salesMain.html
+------ views
+---------- auth
+----------------index.ejs
+----------------login.ejs
+----------------signup.ejs
+---------- index.ejs
+---------- profile.ejs

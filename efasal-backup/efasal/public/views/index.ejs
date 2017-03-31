@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="efasal">
+    <head>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="./libs/angular-material/angular-material.css">
+
+        <link rel="stylesheet" type="text/css" href="../css/custom.css">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+
+    <body ng-controller="mainController as mc" layout="column">
+        <div class="nav-custom">
+            <div class="nav-custom">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h3>E-fasal</h3>
+                        <md-button ng-click="toggleLeft()"><md-icon aria-label="Menu" class="material-icons">menu</md-icon></md-button>
+                    </div>
+                </md-toolbar>
+            </div>
+        </div>
+        <div class="container" layout="row" flex>
+            <md-sidenav class="md-sidenav-left" md-component-id="left" flex="20">
+                        <md-list ng-controller="sidenavController" >
+                            <md-list-item class="md-2-line" ng-repeat="item in menuItems" ui-sref="{{item.link}}" ng-click="toggleLeft()">
+                                <a ng-class="navaClass('{{item.link}}')">{{item.label}}</a>
+                            </md-list-item>
+                        </md-list>
+            </md-sidenav>
+            <md-content class="content-panel-pad" flex>
+                <div ui-view></div>
+            </md-content>
+        </div>
+        <md-footer class="white-bg">
+            <div ng-controller="footerController as fc">
+                <p>{{ FooterMessage }}</p> 
+            </div>
+        </md-footer>  
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.js"></script>
+        <script src="./libs/angular-material/angular-material.js"></script>
+        <script src="https://rawgithub.com/gsklee/ngStorage/master/ngStorage.js"></script>
+        
+        <!-- core config file for routing -->
+        <script type="text/javascript" src="../js/core.js"></script>
+
+        <!-- custom services -->
+        <script type="text/javascript" src="../js/services/sharedService.js"></script>
+
+        <!-- controllers -->
+        <script type="text/javascript" src="../js/controllers/HomeCtrl.js"></script>
+        <script type="text/javascript" src="../js/controllers/mainCtrl.js"></script>
+        <script type="text/javascript" src="../js/controllers/salesCtrl.js"></script>
+        <script type="text/javascript" src="../js/controllers/projectCtrl.js"></script>
+        <script type="text/javascript" src="../js/controllers/cropDetailsCtrl.js"></script>
+        <script type="text/javascript" src="../js/controllers/addCropCtrl.js"></script>
+        <script type="text/javascript" src="../js/controllers/footerCtrl.js"></script>
+        <script type="text/javascript" src="../js/controllers/sidenavCtrl.js"></script>
+        <script type="text/javascript" src="../js/controllers/editCropCtrl.js"></script>      
+    </body>
+</html>
