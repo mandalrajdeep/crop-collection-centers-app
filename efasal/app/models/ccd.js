@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var MandiSchema = require('../schemas/mandi');
+var ccdSchema = require('../schemas/ccd');
 
-var Mandi = mongoose.model('Mandi', MandiSchema);
-var queryParams = MandiSchema._queryParams;
+var CCD = mongoose.model('CCD', ccdSchema);
+var queryParams = ccdSchema._queryParams;
 
 function execQuery(query, callback) {
     query.select(queryParams.select)
@@ -11,73 +11,73 @@ function execQuery(query, callback) {
 }
 
 function _findRaw(attrs, callback) {
-    Mandi.find(attrs || {}).exec(callback);
+    CCD.find(attrs || {}).exec(callback);
 }
 
 function _find(attrs, callback) {
-    var query = Mandi.find(attrs || {});
+    var query = CCD.find(attrs || {});
     execQuery(query, callback);
 }
 
 function _findOne(attrs, callback) {
-    var query = Mandi.findOne(attrs || {});
+    var query = CCD.findOne(attrs || {});
     execQuery(query, callback);
 }
 
 function _findByAttributes(attrs, callback) {
-    _find(attrs, function (error, mandis) {
+    _find(attrs, function (error, ccds) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandis);
+        callback(null, ccds);
     })
 }
 
 function findAll(callback) {
-    _find({}, function (error, mandis) {
+    _find({}, function (error, ccds) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandis);
+        callback(null, ccds);
     });
 }
 
 function findById(id, callback) {
-    _findOne({ _id: id }, function (error, mandi) {
+    _findOne({ _id: id }, function (error, ccds) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandi);
+        callback(null, ccds);
     });
 }
 
 function create(attrs, callback) {
     // Here you can validate and sanitize 'attrs' before creating
-    Mandi.create(attrs, function (error, mandi) {
+    CCD.create(attrs, function (error, ccds) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandi);
+        callback(null, ccds);
     });
 }
 
 function update(id, attrs, callback) {
     // Here you can validate and sanitize 'attrs' before updating
-    Mandi.update({ _id: id }, attrs, function (error, rawMessage) {
+    CCD.update({ _id: id }, attrs, function (error, rawMessage) {
         if (error) {
             return handleError(error, callback);
         }
-
+        console.log(rawMessage);
         callback(null, rawMessage);
     });
 }
 
 function remove(id, callback) {
-    Mandi.remove({ _id: id }, function (error) {
+    CCD.remove({ _id: id }, function (error) {
         if (error) {
             return handleError(error, callback);
         }

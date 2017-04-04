@@ -5,13 +5,15 @@ var randtoken = require('rand-token');
 
 var Schema = mongoose.Schema;
 // define the schema for user model
+
+var USER_TYPES = ['admin', 'operations', 'sales', 'agents'];
+var TOKEN_EXPIRY = 7 * 24 * 60 * 60;
 var userSchema = mongoose.Schema({
 
 local : {
         username     : {type: String, required: true, trim: true, unique: true},
         password     : {type: String, required: true, trim: true},
-        role         : {type: String, default: 'Admin', 
-		enum: ['admin', 'operations', 'sales', 'agents']}
+        role         : {type: String, default: 'admin', enum: USER_TYPES}
     },
 token : {
         type: Schema.Types.ObjectId,
@@ -31,15 +33,15 @@ var tokenSchema = mongoose.Schema({
 	},
 	expireAt: {
 		type: Date,
-		expires: 7 * 24 * 60 * 60,
+		expires: TOKEN_EXPIRY,
 		default: Date.now
 	}
 });
 
+// methods ======================
+
 // this function generates the token, 
 // then saves it with the user and saves the token
-
-// methods ======================
 userSchema.methods.generateToken = function(){
 	var token = new Token();
 	token.value = randtoken.generate(32);

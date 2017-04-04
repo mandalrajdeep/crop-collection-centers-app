@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var MandiSchema = require('../schemas/mandi');
+var buyerSchema = require('../schemas/buyer');
 
-var Mandi = mongoose.model('Mandi', MandiSchema);
-var queryParams = MandiSchema._queryParams;
+var Buyer = mongoose.model('Buyer', buyerSchema);
+var queryParams = buyerSchema._queryParams;
 
 function execQuery(query, callback) {
     query.select(queryParams.select)
@@ -11,73 +11,72 @@ function execQuery(query, callback) {
 }
 
 function _findRaw(attrs, callback) {
-    Mandi.find(attrs || {}).exec(callback);
+    Buyer.find(attrs || {}).exec(callback);
 }
 
 function _find(attrs, callback) {
-    var query = Mandi.find(attrs || {});
+    var query = Buyer.find(attrs || {});
     execQuery(query, callback);
 }
 
 function _findOne(attrs, callback) {
-    var query = Mandi.findOne(attrs || {});
+    var query = Buyer.findOne(attrs || {});
     execQuery(query, callback);
 }
 
 function _findByAttributes(attrs, callback) {
-    _find(attrs, function (error, mandis) {
+    _find(attrs, function (error, buyers) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandis);
+        callback(null, buyers);
     })
 }
 
 function findAll(callback) {
-    _find({}, function (error, mandis) {
+    _find({}, function (error, buyers) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandis);
+        callback(null, buyers);
     });
 }
 
 function findById(id, callback) {
-    _findOne({ _id: id }, function (error, mandi) {
+    _findOne({ _id: id }, function (error, buyers) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandi);
+        callback(null, buyers);
     });
 }
 
 function create(attrs, callback) {
     // Here you can validate and sanitize 'attrs' before creating
-    Mandi.create(attrs, function (error, mandi) {
+    Buyer.create(attrs, function (error, buyers) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandi);
+        callback(null, buyers);
     });
 }
 
 function update(id, attrs, callback) {
     // Here you can validate and sanitize 'attrs' before updating
-    Mandi.update({ _id: id }, attrs, function (error, rawMessage) {
+    Buyer.update({ _id: id }, attrs, function (error, rawMessage) {
         if (error) {
             return handleError(error, callback);
         }
-
         callback(null, rawMessage);
     });
 }
 
 function remove(id, callback) {
-    Mandi.remove({ _id: id }, function (error) {
+    Buyer.remove({ _id: id }, function (error) {
         if (error) {
             return handleError(error, callback);
         }

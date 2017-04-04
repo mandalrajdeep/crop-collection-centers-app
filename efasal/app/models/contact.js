@@ -1,39 +1,111 @@
-// load the things we need
 var mongoose = require('mongoose');
+var contactSchema = require('../schemas/contact');
 
-// define the schema for location model
-var contactSchema = mongoose.Schema({
+var Contact = mongoose.model('Contact', contactSchema);
+var queryParams = contactSchema._queryParams;
 
-    name        : {type: String, trim: true},
-    work        : {
-    	job_title		: {type: String, trim: true},
-    	organization	: {type: String, trim: true}
-    			},
-    phone 		: [{
-            label        : {type: String, enum: ['work', 'home', 'other']},
-            value       : {type: String, trim: true}
+function execQuery(query, callback) {
+    query.select(queryParams.select)
+        .populate(queryParams.populate)
+        .exec(callback);
+}
 
-    }],
-    email 		: [{
-            label       : {type: String, enum: ['work', 'personal', 'other']},
-            value       : {type: String, trim: true, lowercase: true}
-    }],
-    address 	: {
-            name        : {type: String, required: true, trim: true},
-            type        : {type: String, required: true, enum: ['village', 'town', 'city']},
-            locality    : {type: String, trim: true},
-            district    : {type: String, trim: true},
-            state       : {type: String, required: true, default: 'Madhya Pradesh', enum: ['Delhi', 'Madhya Pradesh', 'Maharashtra', 'Karnataka']},
-            country     : {type: String, required: true, default: 'India', enum: ['India', 'Bangaldesh']},
-            pin         : {type: String, required: true, trim: true}
-            } 
-},
-{
-	timestamps: true
-});
+function _findRaw(attrs, callback) {
+    Contact.find(attrs || {}).exec(callback);
+}
 
+function _find(attrs, callback) {
+    var query = Contact.find(attrs || {});
+    execQuery(query, callback);
+}
 
-// methods ======================
+function _findOne(attrs, callback) {
+    var query = Contact.findOne(attrs || {});
+    execQuery(query, callback);
+}
 
-// create the model for location and expose it to the app
-module.exports = mongoose.model('Contact', contactSchema);
+function _findByAttributes(attrs, callback) {
+    _find(attrs, function (error, contacts) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, contacts);
+    })
+}
+
+function findAll(callback) {
+    _find({}, function (error, contacts) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, contacts);
+    });
+}
+
+function findById(id, callback) {
+    _findOne({ _id: id }, function (error, contact) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, contact);
+    });
+}
+
+function findByName(name, callback) {
+    _findByAttributes({ name: name }, function (error, contacts) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, contacts);
+    });
+}
+
+function create(attrs, callback) {
+    // Here you can validate and sanitize 'attrs' before creating
+    Contact.create(attrs, function (error, contact) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, contact);
+    });
+}
+
+function update(id, attrs, callback) {
+    // Here you can validate and sanitize 'attrs' before updating
+    Contact.update({ _id: id }, attrs, function (error, rawMessage) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, rawMessage);
+    });
+}
+
+function remove(id, callback) {
+    Contact.remove({ _id: id }, function (error) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null);
+    });
+}
+
+function handleError(error, callback) {
+    // Here you can use some Logger module or create your own to log errors
+    callback(error);
+}
+
+module.exports = {
+    findAll: findAll,
+    findById: findById,
+    findByName: findByName,
+    create: create,
+    update: update,
+    remove: remove
+};

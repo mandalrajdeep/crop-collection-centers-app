@@ -1,5 +1,5 @@
 var fs = require('fs');
-var Crop = require('../models/crop');
+var Contract = require('../models/contract');
 
 function init(router, passport) {
     router.get('/', findAll);
@@ -10,29 +10,29 @@ function init(router, passport) {
 }
 
 function findAll(request, response, next) {
-    Crop.findAll(function (error, crop) {
+    Contract.findAll(function (error, contracts) {
         if (error) {
             return response.send(error);
         }
-        var status = crop.length ? 200 : 204;
-        response.status(status).json(crop);
+        var status = contracts.length ? 200 : 204;
+        response.status(status).json(contracts);
     });
 }
 
 function findById(request, response, next) {
     var id = request.params.id;
-    Crop.findById(id, function (error, crop) {
+    Contract.findById(id, function (error, contracts) {
         if (error) {
             return response.send(error);
         }
-        var status = (crop && crop._id) ? 200 : 204;
-        response.status(status).json(crop);
+        var status = (contracts && contracts._id) ? 200 : 204;
+        response.status(status).json(contracts);
     });
 }
 
 function create(request, response, next) {
     var attrs = request.body;
-    Crop.create(attrs, function (error, crop) {
+    Contract.create(attrs, function (error, contracts) {
         if (error) {
             return response.send(error);
         }
@@ -43,7 +43,7 @@ function create(request, response, next) {
 function update(request, response, next) {
     var id = request.params.id,
         attrs = request.body;
-    Crop.update(id, attrs, function (error, rawMessage) {
+    Contract.update(id, attrs, function (error, rawMessage) {
         if (error) {
             return response.send(error);
         }
@@ -53,7 +53,7 @@ function update(request, response, next) {
 
 function remove(request, response, next) {
     var id = request.params.id;
-    Crop.remove(id, function (error) {
+    Contract.remove(id, function (error) {
         if (error) {
             return response.send(error);
         }

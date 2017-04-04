@@ -1,41 +1,58 @@
 var fs = require('fs');
-var Crop = require('../models/crop');
+var Package = require('../models/package');
 
 function init(router, passport) {
     router.get('/', findAll);
     router.get('/:id', findById);
+    router.get('/search/query', findByCrop);
     router.post('/', create);
     router.put('/:id', update);
     router.delete('/:id', remove);
 }
 
 function findAll(request, response, next) {
-    Crop.findAll(function (error, crop) {
+    Package.findAll(function (error, packs) {
         if (error) {
             return response.send(error);
         }
-        var status = crop.length ? 200 : 204;
-        response.status(status).json(crop);
+            console.log('err');
+
+        var status = packs.length ? 200 : 204;
+        response.status(status).json(packs);
     });
 }
 
 function findById(request, response, next) {
     var id = request.params.id;
-    Crop.findById(id, function (error, crop) {
+    Package.findById(id, function (error, pack) {
         if (error) {
             return response.send(error);
         }
-        var status = (crop && crop._id) ? 200 : 204;
-        response.status(status).json(crop);
+
+        var status = (pack && pack._id) ? 200 : 204;
+        response.status(status).json(pack);
+    });
+}
+
+function findByCrop(request, response, next) {
+    var crop = request.query.crop;
+    Package.findByCrop(crop, function (error, packs) {
+        if (error) {
+            return response.send(error);
+        }
+
+        var status = packs.length ? 200 : 204;
+        response.status(status).json(packs);
     });
 }
 
 function create(request, response, next) {
     var attrs = request.body;
-    Crop.create(attrs, function (error, crop) {
+    Package.create(attrs, function (error, pack) {
         if (error) {
             return response.send(error);
         }
+
         response.status(201).json('Object creation successful.');
     });
 }
@@ -43,17 +60,18 @@ function create(request, response, next) {
 function update(request, response, next) {
     var id = request.params.id,
         attrs = request.body;
-    Crop.update(id, attrs, function (error, rawMessage) {
+    Package.update(id, attrs, function (error, rawMessage) {
         if (error) {
             return response.send(error);
         }
+
         response.status(200).json('Object updation successful');
     });
 }
 
 function remove(request, response, next) {
     var id = request.params.id;
-    Crop.remove(id, function (error) {
+    Package.remove(id, function (error) {
         if (error) {
             return response.send(error);
         }

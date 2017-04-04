@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var MandiSchema = require('../schemas/mandi');
+var packageSchema = require('../schemas/package');
 
-var Mandi = mongoose.model('Mandi', MandiSchema);
-var queryParams = MandiSchema._queryParams;
+var Package = mongoose.model('Package', packageSchema);
+var queryParams = packageSchema._queryParams;
 
 function execQuery(query, callback) {
     query.select(queryParams.select)
@@ -11,63 +11,73 @@ function execQuery(query, callback) {
 }
 
 function _findRaw(attrs, callback) {
-    Mandi.find(attrs || {}).exec(callback);
+    Package.find(attrs || {}).exec(callback);
 }
 
 function _find(attrs, callback) {
-    var query = Mandi.find(attrs || {});
+    var query = Package.find(attrs || {});
     execQuery(query, callback);
 }
 
 function _findOne(attrs, callback) {
-    var query = Mandi.findOne(attrs || {});
+    var query = Package.findOne(attrs || {});
     execQuery(query, callback);
 }
 
 function _findByAttributes(attrs, callback) {
-    _find(attrs, function (error, mandis) {
+    _find(attrs, function (error, packs) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandis);
+        callback(null, packs);
     })
 }
 
 function findAll(callback) {
-    _find({}, function (error, mandis) {
+    _find({}, function (error, packs) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandis);
+        callback(null, packs);
     });
 }
 
 function findById(id, callback) {
-    _findOne({ _id: id }, function (error, mandi) {
+    _findOne({ _id: id }, function (error, pack) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandi);
+        callback(null, pack);
+    });
+}
+
+function findByCrop(name, callback) {
+    _findByAttributes({ 'crop.name': name }, function (error, packs) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, packs);
     });
 }
 
 function create(attrs, callback) {
     // Here you can validate and sanitize 'attrs' before creating
-    Mandi.create(attrs, function (error, mandi) {
+    Package.create(attrs, function (error, pack) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandi);
+        callback(null, pack);
     });
 }
 
 function update(id, attrs, callback) {
     // Here you can validate and sanitize 'attrs' before updating
-    Mandi.update({ _id: id }, attrs, function (error, rawMessage) {
+    Package.update({ _id: id }, attrs, function (error, rawMessage) {
         if (error) {
             return handleError(error, callback);
         }
@@ -77,7 +87,7 @@ function update(id, attrs, callback) {
 }
 
 function remove(id, callback) {
-    Mandi.remove({ _id: id }, function (error) {
+    Package.remove({ _id: id }, function (error) {
         if (error) {
             return handleError(error, callback);
         }
@@ -94,6 +104,7 @@ function handleError(error, callback) {
 module.exports = {
     findAll: findAll,
     findById: findById,
+    findByCrop: findByCrop,
     create: create,
     update: update,
     remove: remove

@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var MandiSchema = require('../schemas/mandi');
+var contractSchema = require('../schemas/contract');
 
-var Mandi = mongoose.model('Mandi', MandiSchema);
-var queryParams = MandiSchema._queryParams;
+var Contract = mongoose.model('Contract', contractSchema);
+var queryParams = contractSchema._queryParams;
 
 function execQuery(query, callback) {
     query.select(queryParams.select)
@@ -11,73 +11,72 @@ function execQuery(query, callback) {
 }
 
 function _findRaw(attrs, callback) {
-    Mandi.find(attrs || {}).exec(callback);
+    Contract.find(attrs || {}).exec(callback);
 }
 
 function _find(attrs, callback) {
-    var query = Mandi.find(attrs || {});
+    var query = Contract.find(attrs || {});
     execQuery(query, callback);
 }
 
 function _findOne(attrs, callback) {
-    var query = Mandi.findOne(attrs || {});
+    var query = Contract.findOne(attrs || {});
     execQuery(query, callback);
 }
 
 function _findByAttributes(attrs, callback) {
-    _find(attrs, function (error, mandis) {
+    _find(attrs, function (error, contracts) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandis);
+        callback(null, contracts);
     })
 }
 
 function findAll(callback) {
-    _find({}, function (error, mandis) {
+    _find({}, function (error, contracts) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandis);
+        callback(null, contracts);
     });
 }
 
 function findById(id, callback) {
-    _findOne({ _id: id }, function (error, mandi) {
+    _findOne({ _id: id }, function (error, contracts) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandi);
+        callback(null, contracts);
     });
 }
 
 function create(attrs, callback) {
     // Here you can validate and sanitize 'attrs' before creating
-    Mandi.create(attrs, function (error, mandi) {
+    Contract.create(attrs, function (error, contracts) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, mandi);
+        callback(null, contracts);
     });
 }
 
 function update(id, attrs, callback) {
     // Here you can validate and sanitize 'attrs' before updating
-    Mandi.update({ _id: id }, attrs, function (error, rawMessage) {
+    Contract.update({ _id: id }, attrs, function (error, rawMessage) {
         if (error) {
             return handleError(error, callback);
         }
-
         callback(null, rawMessage);
     });
 }
 
 function remove(id, callback) {
-    Mandi.remove({ _id: id }, function (error) {
+    Contract.remove({ _id: id }, function (error) {
         if (error) {
             return handleError(error, callback);
         }
