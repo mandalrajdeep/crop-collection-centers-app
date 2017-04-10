@@ -53,7 +53,7 @@ function setNum (num){
 }
 
 var queryParams = {
-    select: '_id name contractDate  status contractType paymentType startDate endDate',
+    select: '_id name contractDate status contractType paymentType startDate endDate',
     populate: 'buyer agent contact crop package '
 };
 

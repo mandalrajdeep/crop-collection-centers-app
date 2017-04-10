@@ -67,6 +67,7 @@ var aspSchema = mongoose.Schema({
     },
     allocation  : [{
             contract    : {type: Schema.Types.ObjectId, ref: 'Contract'},
+            CCD         : {type: Schema.Types.ObjectId, ref: 'CCD'},
             farmer      : {type: Schema.Types.ObjectId, ref: 'Farmer'},
             quantity    : {type: Number, get: getNum, set: setNum},
             status      : {type: String, enum: STATUS}
@@ -78,8 +79,16 @@ var aspSchema = mongoose.Schema({
 
 
 // methods ======================
+function getNum(num){
+    return (num/100).toFixed(2);
+}
+
+function setNum (num){
+    return num*100;
+}
+
 var queryParams = {
-    select: '_id name parentName aadhar verified dateOfBirth ccd phone email address registrationDate',
+    select: '_id name parentName aadhar verified dateOfBirth phone email address registrationDate',
     populate: 'ccd'
 };
 // create the model for location and expose it to the app

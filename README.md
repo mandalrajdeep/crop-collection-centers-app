@@ -1,29 +1,13 @@
-New Backend Modules Added
-Frontend code - Completed Modules: Crop, Partially Completed: Mandi, Contact
-Backend code - Completed Modules: Login, Crop, Contact, Mandi, ASP, Buyer, Contract, Farmer, Package
+Backend Modules Added
+This upload is indicative of the modules - however, the module development has been freshly started on sails.js
 File structure is defined here
 - app
------- models
----------- user.js
----------- crop.js
----------- contact.js
----------- mandi.js (working)
------- routes
----------- api.js (not used)
----------- auth.js
----------- crop.js
----------- contact.js
----------- mandi.js
----------- secure.js
+------ models (schema functions)
+------ routes (routes)
 ------ functions (temporary)
 - config
----------- auth.js
----------- config.js
----------- database.js
----------- passport.js
----------- roles.js (not used)
 - node_modules
-(list of files)
 - server.js
 - package.json
-- public (to be declared)
+- bower.json
+- public

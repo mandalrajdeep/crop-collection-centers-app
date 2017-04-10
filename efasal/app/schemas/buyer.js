@@ -42,7 +42,7 @@ var buyerSchema = mongoose.Schema({
 
 // methods ======================
 var queryParams = {
-    select: '_id name company type contact crop registrationDate destination',
+    select: '_id name company type registrationDate destination',
     populate: 'contact crop'
 };
 

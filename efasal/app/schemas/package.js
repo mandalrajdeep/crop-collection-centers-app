@@ -70,7 +70,7 @@ function setNum (num){
 }
 
 var queryParams = {
-    select: '_id name labels instructions base seeds crop props threads fillers seals',
+    select: '_id name labels instructions base seeds props threads fillers seals',
     populate: 'crop'
 };
 

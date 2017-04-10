@@ -32,7 +32,7 @@ var mandiSchema = mongoose.Schema({
 });
 
 var queryParams = {
-    select: '_id name contact crop address',
+    select: '_id name address',
     populate: 'contact crop'
 };
 

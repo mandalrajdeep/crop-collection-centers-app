@@ -15,6 +15,7 @@ var DEFAULT_COUNTRY = 'India';
 var IRRIGATION_TYPE = ['Open Well', 'Canal', 'Tubewell', 'Tank', 'None'];
 var BANKS = ['State Bank of India', 'ICICI Bank'];
 var CROP_SEASON = ['Rabi', 'Kharif', 'Zayed'];
+var STATUS = ['type 1', 'type 2'];
 
 // define the schema for farmer model
 var farmerSchema = mongoose.Schema({
@@ -74,7 +75,7 @@ var farmerSchema = mongoose.Schema({
     },
     landDetails : [{
             khasraNo    : {type: String, required: true, trim: true},
-            area        : {type: Number, required: true, get: getArea, set: setArea },
+            area        : {type: Number, required: true, get: getNum, set: getNum },
             irrigationType: {type: String, required: true, enum: IRRIGATION_TYPE}
     }],
     bankDetails : [{
@@ -92,10 +93,12 @@ var farmerSchema = mongoose.Schema({
     }],
     allocation  : [{
             contract    : {type: Schema.Types.ObjectId, ref: 'Contract'},
-            area        : {type: Number, required: true, get: getArea, set: setArea },
+            serviceProvider: {type: Schema.Types.ObjectId, ref: 'ASP'},
+            CCD         : {type: Schema.Types.ObjectId, ref: 'CCD'},            
+            area        : {type: Number, required: true, get: getNum, set: setNum },
             quantity    : {type: Number, get: getNum, set: setNum},
             status      : {type: String, enum: STATUS}
-    }]
+    }],
 },
 {
 	timestamps: true
@@ -104,15 +107,15 @@ var farmerSchema = mongoose.Schema({
 
 // methods ======================
 var queryParams = {
-    select: '_id name parentName aadhar verified dateOfBirth serviceProvider phone email address registrationDate landDetails bankDetails crops ccd',
-    populate: 'serviceProvider ccd crops.crop'
+    select: '_id name parentName aadhar verified dateOfBirth phone email address registrationDate landDetails bankDetails crops',
+    populate: 'serviceProvider ccd crops'
 };
 
-function getArea(num){
+function getNum(num){
     return (num/100).toFixed(2);
 }
 
-function setArea (num){
+function setNum (num){
     return num*100;
 }
 // create the model for location and expose it to the app

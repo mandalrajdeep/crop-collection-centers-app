@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var STATUS = ['live', 'completed', 'approved', 'pending'];
+var CATEGORY = ['type 1', 'type 2'];
 
 // define the schema for CCD model
 var ccdSchema = mongoose.Schema({
@@ -52,6 +53,13 @@ var ccdSchema = mongoose.Schema({
 
 
 // methods ======================
+function getNum(num){
+    return (num/100).toFixed(2);
+}
+
+function setNum (num){
+    return num*100;
+}
 
 // create the model for CCD and expose it to the app
 var queryParams = {

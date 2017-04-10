@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var contactSchema = require('../schemas/contact');
+var invoiceSchema = require('../schemas/invoice');
 
-var Contact = mongoose.model('Contact', contactSchema);
-var queryParams = contactSchema._queryParams;
+var Invoice = mongoose.model('Invoice', invoiceSchema);
+var queryParams = invoiceSchema._queryParams;
 
 function execQuery(query, callback) {
     query.select(queryParams.select)
@@ -11,73 +11,73 @@ function execQuery(query, callback) {
 }
 
 function _findRaw(attrs, callback) {
-    Contact.find(attrs || {}).exec(callback);
+    Invoice.find(attrs || {}).exec(callback);
 }
 
 function _find(attrs, callback) {
-    var query = Contact.find(attrs || {});
+    var query = Invoice.find(attrs || {});
     execQuery(query, callback);
 }
 
 function _findOne(attrs, callback) {
-    var query = Contact.findOne(attrs || {});
+    var query = Invoice.findOne(attrs || {});
     execQuery(query, callback);
 }
 
 function _findByAttributes(attrs, callback) {
-    _find(attrs, function (error, contacts) {
+    _find(attrs, function (error, invoice) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, contacts);
+        callback(null, invoice);
     })
 }
 
 function findAll(callback) {
-    _find({}, function (error, contacts) {
+    _find({}, function (error, invoice) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, contacts);
+        callback(null, invoice);
     });
 }
 
 function findById(id, callback) {
-    _findOne({ _id: id }, function (error, contact) {
+    _findOne({ _id: id }, function (error, invoice) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, contact);
+        callback(null, invoice);
     });
 }
 
 function findByName(name, callback) {
-    _findByAttributes({ name: name }, function (error, contacts) {
+    _findByAttributes({ 'farmer.name': name }, function (error, invoice) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, contacts);
+        callback(null, invoice);
     });
 }
 
 function create(attrs, callback) {
     // Here you can validate and sanitize 'attrs' before creating
-    Contact.create(attrs, function (error, contact) {
+    Invoice.create(attrs, function (error, invoice) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, contact);
+        callback(null, invoice);
     });
 }
 
 function update(id, attrs, callback) {
     // Here you can validate and sanitize 'attrs' before updating
-    Contact.update({ _id: id }, attrs, function (error, rawMessage) {
+    Invoice.update({ _id: id }, attrs, function (error, rawMessage) {
         if (error) {
             return handleError(error, callback);
         }
@@ -87,7 +87,7 @@ function update(id, attrs, callback) {
 }
 
 function remove(id, callback) {
-    Contact.remove({ _id: id }, function (error) {
+    Invoice.remove({ _id: id }, function (error) {
         if (error) {
             return handleError(error, callback);
         }

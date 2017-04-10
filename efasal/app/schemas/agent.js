@@ -8,9 +8,10 @@ var STATES = ['Delhi', 'Madhya Pradesh', 'Maharashtra', 'Karnataka'];
 var DEFAULT_STATE = 'Madhya Pradesh';
 var COUNTRIES = ['India', 'Bangaldesh'];
 var DEFAULT_COUNTRY = 'India';
+var AGENT_TYPE = ['buyer', 'supply', 'logistics'];
 
 // define the schema for contact model
-var contactSchema = mongoose.Schema({
+var agentSchema = mongoose.Schema({
 
     name        : {type: String, trim: true},
     work        : {
@@ -22,6 +23,7 @@ var contactSchema = mongoose.Schema({
             value       : {type: String, trim: true}
 
     }],
+    type        : {type: String, enum: AGENT_TYPE},
     email 		: [{
             label       : {type: String, enum: EMAIL_TYPE},
             value       : {type: String, trim: true, lowercase: true}
@@ -49,5 +51,5 @@ var queryParams = {
     populate: ''
 };
 
-contactSchema._queryParams = queryParams;
-module.exports = contactSchema;
+agentSchema._queryParams = queryParams;
+module.exports = agentSchema;
