@@ -12,11 +12,10 @@ var DEFAULT_COUNTRY = 'India';
 // define the schema for mandi model
 var mandiSchema = mongoose.Schema({
 
-    name        : {type: String, trim: true},
-    contact     : [{type: Schema.Types.ObjectId, ref: 'Contact' }],
-    crop        : [{ type: Schema.Types.ObjectId, ref: 'Crop'}, {
-          price : { type: Number, get: getPrice, set: setPrice } // database unit is paise
-    }],
+    name        : {type: String, required: true, trim: true},
+    contact     : [{type: Schema.Types.ObjectId, ref: 'Agent' }],
+    crop        : [{ type: Schema.Types.ObjectId, ref: 'Crop'
+        }],
     address 	: { 
             name        : {type: String, required: true, trim: true},
             type        : {type: String, required: true, enum: ADDRESS_TYPES},
@@ -35,14 +34,6 @@ var queryParams = {
     select: '_id name address',
     populate: 'contact crop'
 };
-
-function getPrice(num){
-    return (num/100).toFixed(2);
-}
-
-function setPrice (num){
-    return num*100;
-}
 
 mandiSchema._queryParams = queryParams;
 module.exports = mandiSchema;

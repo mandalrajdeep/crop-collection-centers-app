@@ -15,11 +15,11 @@ var agentSchema = mongoose.Schema({
 
     name        : {type: String, trim: true},
     work        : {
-    	job_title		: {type: String, trim: true},
+    	job_title       : {type: String, trim: true},
     	organization	: {type: String, trim: true}
     			},
     phone 		: [{
-            label        : {type: String, enum: PHONE_TYPE},
+            label       : {type: String, enum: PHONE_TYPE},
             value       : {type: String, trim: true}
 
     }],

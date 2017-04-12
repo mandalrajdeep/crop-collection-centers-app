@@ -26,8 +26,8 @@ var contractSchema = mongoose.Schema({
         freight : {type: String, enum: PRICE_SETTERS},
         sacks   : {type: String, enum: PRICE_SETTERS}
     },
-    agent       : {type: Schema.Types.ObjectId, ref: 'Contact'},
-    contact     : [{type: Schema.Types.ObjectId, ref: 'Contact' }],
+    agent       : {type: Schema.Types.ObjectId, ref: 'Agent'},
+    contact     : [{type: Schema.Types.ObjectId, ref: 'Agent' }],
     crop        : {type: Schema.Types.ObjectId, ref: 'Crop'},
     package     : {type: Schema.Types.ObjectId, ref: 'Package'},
     paymentType : {type: String, required: true, enum: PAYMENT_TYPE},

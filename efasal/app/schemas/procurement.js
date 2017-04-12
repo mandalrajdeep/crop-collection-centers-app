@@ -10,7 +10,8 @@ var Schema = mongoose.Schema;
 var procurementSchema = mongoose.Schema({
     CCD             : {type: Schema.Types.ObjectId, ref: 'CCD'},
     farmer          : {type: Schema.Types.ObjectId, ref: 'Farmer'},
-    serviceProvider : {type: Schema.Types.ObjectId, ref: 'ASP'},
+    serviceProvider : {type: Schema.Types.ObjectId, ref: 'Alloc'},
+    allocation      : {type: Schema.Types.ObjectId, ref: 'ASP'},
     contract        : {type: Schema.Types.ObjectId, ref: 'Contract'},
     crop            : {type: Schema.Types.ObjectId, ref: 'Crop'},
     quantity        : {type: Number, required: true, get: getNum, set: setNum},
@@ -38,7 +39,7 @@ function setNum (num){
 
 var queryParams = {
     select: '_id quantity qualityParams packageUnits paymentStatus transferStatus',
-    populate: 'CCD farmer serviceProvider contract crop package farmerInvoice factoryInvoice'
+    populate: 'CCD farmer allocation serviceProvider contract crop package farmerInvoice factoryInvoice'
 };
 
 procurementSchema._queryParams = queryParams;

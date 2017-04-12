@@ -6,15 +6,19 @@ var randtoken = require('rand-token');
 var Schema = mongoose.Schema;
 // define the schema for user model
 
-var USER_TYPES = ['admin', 'operations', 'sales', 'agents'];
+var ENTITIES = ['efasal', 'ccd', 'asp', 'farmer', 'buyer']
+var USER_TYPES = ['admin', 'operations', 'sales', 'agents', 'marketing'];
 var TOKEN_EXPIRY = 7 * 24 * 60 * 60;
 var userSchema = mongoose.Schema({
 
 local : {
-        username     : {type: String, required: true, trim: true, unique: true},
+        mobile     : {type: Number, required: true, trim: true, unique: true},
         password     : {type: String, required: true, trim: true},
-        role         : {type: String, default: 'admin', enum: USER_TYPES}
     },
+role : {
+		entity: {type: String, required: true, enum: ENTITIES},
+		group:	{type: String, required: true, enum: USER_TYPES}
+	},
 token : {
         type: Schema.Types.ObjectId,
         ref: 'Token',
@@ -57,6 +61,10 @@ userSchema.methods.generateToken = function(){
 	});
 }
 
+userSchema.methods.getRole = function(){
+	console.log(this.role);
+	return this.role;
+}
 userSchema.methods.generateHash = function(password){
 	return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
 }

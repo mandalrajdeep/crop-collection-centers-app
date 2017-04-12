@@ -45,7 +45,7 @@ var farmerSchema = mongoose.Schema({
             required: true
     },
     phone         : [{
-            label        : {type: String, default: WORK, enum: ['work', 'home', 'other']},
+            label        : {type: String, default: WORK, enum: PHONE_TYPE},
             value       : {type: String, trim: true}
     }],
     email 	: [{
@@ -60,13 +60,13 @@ var farmerSchema = mongoose.Schema({
             type: Schema.Types.ObjectId, 
             ref: 'CCD'
     },
-    address : {
+    address     : {
             name        : {type: String, required: true, trim: true},
-            type        : {type: String, required: true, enum: ['village', 'town', 'city']},
+            type        : {type: String, required: true, default: DEFAULT_ADDRESS, enum: ADDRESS_TYPES},
             locality    : {type: String, trim: true},
             district    : {type: String, trim: true},
-            state       : {type: String, required: true, default: 'Madhya Pradesh', enum: ['Delhi', 'Madhya Pradesh', 'Maharashtra', 'Karnataka']},
-            country     : {type: String, required: true, default: 'India', enum: ['India', 'Bangaldesh']},
+            state       : {type: String, required: true, default: DEFAULT_STATE, enum: STATES},
+            country     : {type: String, required: true, default: DEFAULT_COUNTRY, enum: COUNTRIES},
             pin         : {type: String, required: true, trim: true}
         },
     registrationDate    : {
@@ -74,9 +74,7 @@ var farmerSchema = mongoose.Schema({
         required: true
     },
     landDetails : [{
-            khasraNo    : {type: String, required: true, trim: true},
-            area        : {type: Number, required: true, get: getNum, set: getNum },
-            irrigationType: {type: String, required: true, enum: IRRIGATION_TYPE}
+            type: {type: Schema.Types.ObjectId, ref: 'Land'}
     }],
     bankDetails : [{
             passbookName: {type: String, required: true, trim: true},
@@ -84,6 +82,7 @@ var farmerSchema = mongoose.Schema({
             bankAccountNo :{type: String, required: true, trim: true},
             ifsc        : {type: String, required: true, trim: true},
             kcc         : {type: String, trim: true},
+            kccLimit    : {type: Number},
             verified    : {type: Boolean,default: false, required: true},
             primaryAccount: {type: Boolean, default: false}
     }],
@@ -94,8 +93,9 @@ var farmerSchema = mongoose.Schema({
     allocation  : [{
             contract    : {type: Schema.Types.ObjectId, ref: 'Contract'},
             serviceProvider: {type: Schema.Types.ObjectId, ref: 'ASP'},
-            CCD         : {type: Schema.Types.ObjectId, ref: 'CCD'},            
-            area        : {type: Number, required: true, get: getNum, set: setNum },
+            CCD         : {type: Schema.Types.ObjectId, ref: 'CCD'}, 
+            khasraNo    : {type: Schema.Types.ObjectId, ref: 'Land'},
+            areaPercent : {type: Number, required: true, get: getNum, set: setNum },
             quantity    : {type: Number, get: getNum, set: setNum},
             status      : {type: String, enum: STATUS}
     }],
@@ -107,8 +107,8 @@ var farmerSchema = mongoose.Schema({
 
 // methods ======================
 var queryParams = {
-    select: '_id name parentName aadhar verified dateOfBirth phone email address registrationDate landDetails bankDetails crops',
-    populate: 'serviceProvider ccd crops'
+    select: '_id name parentName aadhar verified dateOfBirth phone email address registrationDate  bankDetails crops allocation',
+    populate: 'serviceProvider ccd crops.crop allocation.khasraNo landDetails'
 };
 
 function getNum(num){

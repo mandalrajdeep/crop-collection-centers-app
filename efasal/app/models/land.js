@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var CropSchema = require('../schemas/crop');
+var landSchema = require('../schemas/land');
 
-var Crop = mongoose.model('Crop', CropSchema);
-var queryParams = CropSchema._queryParams;
+var Land = mongoose.model('Land', landSchema);
+var queryParams = landSchema._queryParams;
 
 function execQuery(query, callback) {
     query.select(queryParams.select)
@@ -11,73 +11,73 @@ function execQuery(query, callback) {
 }
 
 function _findRaw(attrs, callback) {
-    Crop.find(attrs || {}).exec(callback);
+    Land.find(attrs || {}).exec(callback);
 }
 
 function _find(attrs, callback) {
-    var query = Crop.find(attrs || {});
+    var query = Land.find(attrs || {});
     execQuery(query, callback);
 }
 
 function _findOne(attrs, callback) {
-    var query = Crop.findOne(attrs || {});
+    var query = Land.findOne(attrs || {});
     execQuery(query, callback);
 }
 
 function _findByAttributes(attrs, callback) {
-    _find(attrs, function (error, crops) {
+    _find(attrs, function (error, lands) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, lands);
     })
 }
 
 function findAll(callback) {
-    _find({}, function (error, crops) {
+    _find({}, function (error, lands) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, lands);
     });
 }
 
 function findById(id, callback) {
-    _findOne({ _id: id }, function (error, crops) {
+    _findOne({ _id: id }, function (error, lands) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, lands);
     });
 }
 
-function findByName(name, callback) {
-    _findByAttributes({ name: new RegExp('^'+name+'$') }, function (error, crops) {
+function findByFarmer(id, callback) {
+    _findByAttributes({ farmer: id }, function (error, lands) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, lands);
     });
 }
 
 function create(attrs, callback) {
     // Here you can validate and sanitize 'attrs' before creating
-    Crop.create(attrs, function (error, crops) {
+    Land.create(attrs, function (error, lands) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, lands);
     });
 }
 
 function update(id, attrs, callback) {
     // Here you can validate and sanitize 'attrs' before updating
-    Crop.update({ _id: id }, attrs, function (error, rawMessage) {
+    Land.update({ _id: id }, attrs, function (error, rawMessage) {
         if (error) {
             return handleError(error, callback);
         }
@@ -87,7 +87,7 @@ function update(id, attrs, callback) {
 }
 
 function remove(id, callback) {
-    Crop.remove({ _id: id }, function (error) {
+    Land.remove({ _id: id }, function (error) {
         if (error) {
             return handleError(error, callback);
         }
@@ -104,7 +104,6 @@ function handleError(error, callback) {
 module.exports = {
     findAll: findAll,
     findById: findById,
-    findByName: findByName,
     create: create,
     update: update,
     remove: remove

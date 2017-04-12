@@ -55,7 +55,7 @@ function findById(id, callback) {
 }
 
 function findByName(name, callback) {
-    _findByAttributes({ name: name }, function (error, farmers) {
+    _findByAttributes({ name: new RegExp('^'+name+'$', "i") }, function (error, farmers) {
         if (error) {
             return handleError(error, callback);
         }
@@ -66,20 +66,20 @@ function findByName(name, callback) {
 
 function findByCCD(id, callback) {
     if (query.ccd !=null && query.ccd !='') {
-        _findByAttributes({ 'ccd': query.ccd }, function (error, asps) {
+        _findByAttributes({ 'ccd': query.ccd }, function (error, farmers) {
             if (error) {
                 return handleError(error, callback);
             }
 
-            callback(null, asps);
+            callback(null, farmers);
         });
     } else if (query.asp != null && query.asp !=''){
-        _findByAttributes({ 'asp': query.asp }, function (error, asps) {
+        _findByAttributes({ 'asp': query.asp }, function (error, farmers) {
             if (error) {
                 return handleError(error, callback);
             }
 
-            callback(null, asps);
+            callback(null, farmers);
         });
     } else {
         callback('Invalid query strings');

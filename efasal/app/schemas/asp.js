@@ -52,7 +52,7 @@ var aspSchema = mongoose.Schema({
             label: {type: String, enum: EMAIL_TYPE},
             value: {type: String, trim: true, lowercase: true}
     }],
-    address     : [{
+    address     : {
             name        : {type: String, required: true, trim: true},
             type        : {type: String, required: true, default: DEFAULT_ADDRESS, enum: ADDRESS_TYPES},
             locality    : {type: String, trim: true},
@@ -60,7 +60,7 @@ var aspSchema = mongoose.Schema({
             state       : {type: String, required: true, default: DEFAULT_STATE, enum: STATES},
             country     : {type: String, required: true, default: DEFAULT_COUNTRY, enum: COUNTRIES},
             pin         : {type: String, required: true, trim: true}
-        }],
+        },
     registrationDate: {
         type: Date,
         required: true

@@ -6,7 +6,7 @@ var PARAMETER_UNITS = ['percentage', 'centimeters', 'ratio'];
 var cropSchema = mongoose.Schema({
     name        : {type: String, required: true, trim: true},
     variety     : {type: String, required: true, trim: true},
-    note        : {type: String, trim: true},
+    description : {type: String, trim: true},
     parameters  : [{
         name    : {type: String, trim: true},
         unit    : {type: String, enum: PARAMETER_UNITS}

@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var CropSchema = require('../schemas/crop');
+var allocSchema = require('../schemas/allocation');
 
-var Crop = mongoose.model('Crop', CropSchema);
-var queryParams = CropSchema._queryParams;
+var Alloc = mongoose.model('Alloc', allocSchema);
+var queryParams = allocSchema._queryParams;
 
 function execQuery(query, callback) {
     query.select(queryParams.select)
@@ -11,73 +11,73 @@ function execQuery(query, callback) {
 }
 
 function _findRaw(attrs, callback) {
-    Crop.find(attrs || {}).exec(callback);
+    Alloc.find(attrs || {}).exec(callback);
 }
 
 function _find(attrs, callback) {
-    var query = Crop.find(attrs || {});
+    var query = Alloc.find(attrs || {});
     execQuery(query, callback);
 }
 
 function _findOne(attrs, callback) {
-    var query = Crop.findOne(attrs || {});
+    var query = Alloc.findOne(attrs || {});
     execQuery(query, callback);
 }
 
 function _findByAttributes(attrs, callback) {
-    _find(attrs, function (error, crops) {
+    _find(attrs, function (error, allocs) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, allocs);
     })
 }
 
 function findAll(callback) {
-    _find({}, function (error, crops) {
+    _find({}, function (error, allocs) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, allocs);
     });
 }
 
 function findById(id, callback) {
-    _findOne({ _id: id }, function (error, crops) {
+    _findOne({ _id: id }, function (error, allocs) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, allocs);
     });
 }
 
-function findByName(name, callback) {
-    _findByAttributes({ name: new RegExp('^'+name+'$') }, function (error, crops) {
+function findByFarmer(id, callback) {
+    _findByAttributes({ farmer: id }, function (error, allocs) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, allocs);
     });
 }
 
 function create(attrs, callback) {
     // Here you can validate and sanitize 'attrs' before creating
-    Crop.create(attrs, function (error, crops) {
+    Alloc.create(attrs, function (error, allocs) {
         if (error) {
             return handleError(error, callback);
         }
 
-        callback(null, crops);
+        callback(null, allocs);
     });
 }
 
 function update(id, attrs, callback) {
     // Here you can validate and sanitize 'attrs' before updating
-    Crop.update({ _id: id }, attrs, function (error, rawMessage) {
+    Alloc.update({ _id: id }, attrs, function (error, rawMessage) {
         if (error) {
             return handleError(error, callback);
         }
@@ -87,7 +87,7 @@ function update(id, attrs, callback) {
 }
 
 function remove(id, callback) {
-    Crop.remove({ _id: id }, function (error) {
+    Alloc.remove({ _id: id }, function (error) {
         if (error) {
             return handleError(error, callback);
         }

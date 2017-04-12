@@ -55,7 +55,7 @@ function findById(id, callback) {
 }
 
 function findByName(name, callback) {
-    _findByAttributes({ name: name }, function (error, asps) {
+    _findByAttributes({ name: new RegExp('^'+name+'$', "i") }, function (error, asps) {
         if (error) {
             return handleError(error, callback);
         }
@@ -64,8 +64,8 @@ function findByName(name, callback) {
     });
 }
 
-function findByCCD(id, callback) {
-    _findByAttributes({ 'ccd': id }, function (error, asps) {
+function findByCCD(ccd, callback) {
+    _findByAttributes({ ccd: ccd }, function (error, asps) {
         if (error) {
             return handleError(error, callback);
         }
@@ -84,16 +84,16 @@ function findByArea(query, callback) {
 
             callback(null, asps);
         });
-    } else if (query.district != null && query.district !=''){
-        _findByAttributes({ 'address.district': query.district }, function (error, asps) {
+    } else if (query.pin != null && query.pin !=''){
+        _findByAttributes({ 'address.pin': query.pin }, function (error, asps) {
             if (error) {
                 return handleError(error, callback);
             }
 
             callback(null, asps);
         });
-    } else if (query.pin != null && query.pin !=''){
-        _findByAttributes({ 'address.pin': query.pin }, function (error, asps) {
+    } else if (query.district != null && query.district !=''){
+        _findByAttributes({ 'address.district': query.district }, function (error, asps) {
             if (error) {
                 return handleError(error, callback);
             }

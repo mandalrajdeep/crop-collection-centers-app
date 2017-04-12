@@ -1,5 +1,5 @@
 var fs = require('fs');
-var Crop = require('../models/crop');
+var Land = require('../models/land');
 
 function init(router, passport) {
     router.get('/', findAll);
@@ -11,35 +11,35 @@ function init(router, passport) {
 }
 
 function findAll(request, response, next) {
-    Crop.findAll(function (error, crop) {
+    Land.findAll(function (error, lands) {
         if (error) {
             return response.send(error);
         }
-        var status = crop.length ? 200 : 204;
-        response.status(status).json(crop);
+        var status = lands.length ? 200 : 204;
+        response.status(status).json(lands);
     });
 }
 
 function findById(request, response, next) {
     var id = request.params.id;
-    Crop.findById(id, function (error, crop) {
+    Land.findById(id, function (error, lands) {
         if (error) {
             return response.send(error);
         }
-        var status = (crop && crop._id) ? 200 : 204;
-        response.status(status).json(crop);
+        var status = (lands && lands._id) ? 200 : 204;
+        response.status(status).json(lands);
     });
 }
 
 function findByAttrs(request, response, next) {
-    if (request.query.name != null) {
-        Crop.findByName(request.query.name, function (error, crops) {
+    if (request.query.farmer != null) {
+        Land.findByFarmer(request.query.farmer, function (error, lands) {
             if (error) {
                 return response.send(error);
             }
 
-            var status = crops.length ? 200 : 204;
-            response.status(status).json(crops);
+            var status = lands.length ? 200 : 204;
+            response.status(status).json(lands);
         });
     }
     else {
@@ -49,7 +49,7 @@ function findByAttrs(request, response, next) {
 
 function create(request, response, next) {
     var attrs = request.body;
-    Crop.create(attrs, function (error, crop) {
+    Land.create(attrs, function (error, lands) {
         if (error) {
             return response.send(error);
         }
@@ -60,7 +60,7 @@ function create(request, response, next) {
 function update(request, response, next) {
     var id = request.params.id,
         attrs = request.body;
-    Crop.update(id, attrs, function (error, rawMessage) {
+    Land.update(id, attrs, function (error, rawMessage) {
         if (error) {
             return response.send(error);
         }
@@ -70,7 +70,7 @@ function update(request, response, next) {
 
 function remove(request, response, next) {
     var id = request.params.id;
-    Crop.remove(id, function (error) {
+    Land.remove(id, function (error) {
         if (error) {
             return response.send(error);
         }

@@ -17,7 +17,7 @@ var invoiceSchema = mongoose.Schema({
         rate        : {type: Number, get: getPrice, set: setPrice}
     }],
     packs     : [{
-        procurement : {type: Schema.Types.ObjectId, ref: 'Package'},
+        package : {type: Schema.Types.ObjectId, ref: 'Package'},
         quantity    : {type: Number, required: true, get: getNum, set: setNum},
         rate        : {type: Number, get: getPrice, set: setPrice}
     }],
@@ -29,7 +29,7 @@ var invoiceSchema = mongoose.Schema({
 
 var queryParams = {
     select: '_id date status procs packs',
-    populate: 'CCD ASP farmer'
+    populate: 'CCD ASP farmer procs.procurement procs.crop packs.package'
 };
 
 invoiceSchema._queryParams = queryParams;

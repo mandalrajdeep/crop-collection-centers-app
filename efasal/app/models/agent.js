@@ -55,7 +55,7 @@ function findById(id, callback) {
 }
 
 function findByName(name, callback) {
-    _findByAttributes({ name: name }, function (error, agents) {
+    _findByAttributes({ name: new RegExp('^'+name+'$', "i") }, function (error, agents) {
         if (error) {
             return handleError(error, callback);
         }

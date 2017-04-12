@@ -5,6 +5,12 @@ var Schema = mongoose.Schema;
 
 var STATUS = ['live', 'completed', 'approved', 'pending'];
 var CATEGORY = ['type 1', 'type 2'];
+var DEFAULT_ADDRESS = ['village'];
+var ADDRESS_TYPES = ['village', 'town', 'city'];
+var STATES = ['Delhi', 'Madhya Pradesh', 'Maharashtra', 'Karnataka'];
+var DEFAULT_STATE = 'Madhya Pradesh';
+var COUNTRIES = ['India', 'Bangaldesh'];
+var DEFAULT_COUNTRY = 'India';
 
 // define the schema for CCD model
 var ccdSchema = mongoose.Schema({
@@ -19,23 +25,27 @@ var ccdSchema = mongoose.Schema({
             required: true,
             enum : CATEGORY
     },    
-    address     : [{
+    address 	: {
             name        : {type: String, required: true, trim: true},
-            type        : {type: String, required: true, enum: ['village', 'town', 'city']},
+            type        : {type: String, required: true, enum: ADDRESS_TYPES},
             locality    : {type: String, trim: true},
             district    : {type: String, trim: true},
-            state       : {type: String, required: true, default: 'Madhya Pradesh', enum: ['Delhi', 'Madhya Pradesh', 'Maharashtra', 'Karnataka']},
-            country     : {type: String, required: true, default: 'India', enum: ['India', 'Bangaldesh']},
+            state       : {type: String, required: true, default: DEFAULT_STATE, enum: STATES},
+            country     : {type: String, required: true, default: DEFAULT_COUNTRY, enum: COUNTRIES},
             pin         : {type: String, required: true, trim: true}
+        },
+    contact     : [{
+            type: Schema.Types.ObjectId, 
+            ref: 'Agent' 
         }],
     registrationDate    : {
             type: Date,
             required: true
         },
-    refMandi            : {
+    refMandi            : [{
             crop        : {type: Schema.Types.ObjectId, ref: 'Crop'},
             mandi       : {type: Schema.Types.ObjectId, ref: 'Mandi'}
-    },
+    }],
     allocation  : [{
             contract    : {type: Schema.Types.ObjectId, ref: 'Contract'},
             serviceProvider     : {type: Schema.Types.ObjectId, ref: 'ASP'},
@@ -64,7 +74,7 @@ function setNum (num){
 // create the model for CCD and expose it to the app
 var queryParams = {
     select: '_id name category address registrationDate',
-    populate: ''
+    populate: 'contact refMandi'
 };
 
 ccdSchema._queryParams = queryParams;
