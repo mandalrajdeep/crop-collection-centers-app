@@ -1,7 +1,4 @@
-Backend & Frontend Files need to merge now. More changes done
-Frontend code - Completed Modules: Crop, Partially Completed: Mandi, Contact
-Backend code - Completed Modules: Login, Crop, Contact, Partially Completed: Mandi
-File structure finalized. Front end code not aligned with backend in this push.
+This is a development module - efasal directory has been declared as the root.
 
 File structure is defined here
 - app
