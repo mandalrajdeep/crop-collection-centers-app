@@ -1,102 +1,82 @@
 var fs = require('fs');
-
-var User = require('../models/user').User;
-var Token = require('../models/user').Token;
 var Crop = require('../models/crop');
 
-//var Roles = require('../config/roles.js');
+function init(router, passport) {
+    router.get('/', findAll);
+    router.get('/:id', findById);
+    router.get('/search/query', findByAttrs);
+    router.post('/', create);
+    router.put('/:id', update);
+    router.delete('/:id', remove);
+}
 
-// URL localhost:8080/crop/
-module.exports = function(router, passport){
-        
-        // fetch all crops by crop/
-        router.get('/', function(req, res) {
-            Crop.find(function(err, crops) {
-            if (err)
-                res.send(err);
-            else res.json(crops);
-            });
-        });
+function findAll(request, response, next) {
+    Crop.findAll(function (error, crop) {
+        if (error) {
+            return response.send(error);
+        }
+        var status = crop.length ? 200 : 204;
+        response.status(status).json(crop);
+    });
+}
 
-        router.post('/', function(req, res) {
-            var crop = new Crop();      // create a new instance of the Crop model
-            crop.name = req.body.name;  // set the crops name (comes from the request)
-            crop.variety = req.body.variety;
-            crop.note = req.body.note;
-            var parameters = req.body.parameters;
-            for (var param in parameters) {
-                 crop.parameters.push({name: param, unit: parameters[param]});
+function findById(request, response, next) {
+    var id = request.params.id;
+    Crop.findById(id, function (error, crop) {
+        if (error) {
+            return response.send(error);
+        }
+        var status = (crop && crop._id) ? 200 : 204;
+        response.status(status).json(crop);
+    });
+}
+
+function findByAttrs(request, response, next) {
+    if (request.query.name != null) {
+        Crop.findByName(request.query.name, function (error, crops) {
+            if (error) {
+                return response.send(error);
             }
 
-            // save the crop and check for errors
-            crop.save(function(err) {
-                if (err)
-                    res.send(err);
-                else res.json({ message: 'Crop created!' });
-            });
+            var status = crops.length ? 200 : 204;
+            response.status(status).json(crops);
         });
+    }
+    else {
+        response.status(405).json('Invalid query');
+    }
+}
 
-        // fetch one by crop/ID
-		router.get('/:crop_id', function(req, res){
-            Crop.findById(req.params.crop_id, function(err, crop) {
-                if (err)
-                    res.send(err);
-                else res.json(crop);
-            });
-        });
+function create(request, response, next) {
+    var attrs = request.body;
+    Crop.create(attrs, function (error, crop) {
+        if (error) {
+            return response.send(error);
+        }
+        response.status(201).json('Object creation successful.');
+    });
+}
 
-        router.put('/:crop_id', function(req, res) {
-            Crop.findById(req.params.crop_id, function(err, crop) {
-                if (err)
-                    res.send(err);
-                else {
-                    crop.name = req.body.name;  // set the crops name (comes from the request)
-                    crop.variety = req.body.variety;
-                    crop.note = req.body.note;
+function update(request, response, next) {
+    var id = request.params.id,
+        attrs = request.body;
+    Crop.update(id, attrs, function (error, rawMessage) {
+        if (error) {
+            return response.send(error);
+        }
+        response.status(200).json('Object updation successful');
+    });
+}
 
-                    var parameters = req.body.parameters;
-                    for (var param in parameters) {
-                        crop.parameters.push({name: param, unit: parameters[param]});
-                    }
-                    // saving cropp after update
-                    crop.save(function(err) {
-                        if (err)
-                            res.send(err);
-                        else res.json({ message: 'Crop updated!' });
-                    });
-                }
+function remove(request, response, next) {
+    var id = request.params.id;
+    Crop.remove(id, function (error) {
+        if (error) {
+            return response.send(error);
+        }
 
-            });
-        });
+        response.status(200).json('Object deletion successful');
+    });
+}
 
-        router.delete('/:crop_id', function(req, res) {
-            Crop.remove({
-                _id: req.params.crop_id
-            }, function (err, crop) {
-                if (err)
-                    res.send(err);
-                else if (!crop)
-                    res.send('Invalid ID for deletion');
-                else res.json({message: 'Successfully Deleted'})
-            })
-        });
-        
-        // fetch all by crop name
-        router.get('/list/:crop_name', function(req, res){
-            Crop.find({name:req.params.crop_name}).exec(function(err, crop) {
-                console.log(crop);
-                if (err)
-                    res.send(err);
-                else res.json(crop);
-            });
-        });
-        
-        // fetch one by crop name and type
-        router.get('/list/:crop_name/:variety_name', function(req, res){
-            Crop.findOne({name:req.params.crop_name, variety:req.params.variety_name}, function(err, crop) {
-                if (err)
-                    res.send(err);
-                else res.json(crop);
-            });
-        });
-};
+module.exports = init;

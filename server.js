@@ -17,7 +17,9 @@ var mongoStore = require('connect-mongo')(session);
 var configDB = require('./config/database.js');
 
 //autoIndex to False in Production
-mongoose.connect(configDB.url, { config: { autoIndex: true } });
+mongoose.connect(configDB.url, {
+	config: {
+		autoIndex: true } });
 require('./config/passport')(passport);
 
 app.use(morgan('dev'));
@@ -27,7 +29,7 @@ app.use(bodyParser.json());
 app.use(session({secret: 'anystringoftext',
 				 saveUninitialized: true,
 				 resave: true,
-				 store: new mongoStore({ mongooseConnection: mongoose.connection,
+				 store: new mongoStore({mongooseConnection: mongoose.connection,
 				 							ttl: 2 * 24 * 60 * 60  //time to live
 })}));
 
@@ -45,25 +47,46 @@ var auth = express.Router();
 require('./app/routes/auth.js')(auth, passport);
 app.use('/auth', auth);
 
-var api = express.Router();
-require('./app/routes/api.js')(api, passport);
-app.use('/api', api);
+// var api = express.Router();
+// require('./app/routes/api.js')(api, passport);
+// app.use('/api', api);
 
-// var crop = express.Router();
-// require('./app/routes/crop.js')(crop, passport);
-// app.use('/crop', crop);
+var crop = express.Router();
+require('./app/routes/crop.js')(crop, passport);
+app.use('/crop', crop);
 
-// var contact = express.Router();
-// require('./app/routes/contact.js')(contact, passport);
-// app.use('/contact', contact);
+var buyer = express.Router();
+require('./app/routes/buyer.js')(buyer, passport);
+app.use('/buyer', buyer);
 
-// var mandi = express.Router();
-// require('./app/routes/mandi.js')(mandi, passport);
-// app.use('/mandi', mandi);
 
-var secure = express.Router();
-require('./app/routes/secure.js')(secure, passport);
-app.use('/', secure);
+var contract = express.Router();
+require('./app/routes/contract.js')(contract, passport);
+app.use('/contract', contract);
+
+var mandi = express.Router();
+require('./app/routes/mandi.js')(mandi, passport);
+app.use('/mandi', mandi);
+
+var package = express.Router();
+require('./app/routes/package.js')(package, passport);
+app.use('/package', package);
+
+var ccd = express.Router();
+require('./app/routes/ccd.js')(ccd, passport);
+app.use('/ccd', ccd);
+
+var asp = express.Router();
+require('./app/routes/asp.js')(asp, passport);
+app.use('/asp', asp);
+
+var farmer = express.Router();
+require('./app/routes/farmer.js')(farmer, passport);
+app.use('/farmer', farmer);
+
+// var secure = express.Router();
+// require('./app/routes/secure.js')(secure, passport);
+// app.use('/', secure);
 
 app.listen(port);
 console.log('Server running on port: ' + port);

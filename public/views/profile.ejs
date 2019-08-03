@@ -18,8 +18,7 @@
         </div>
 
         <div class="row">
-
-            <!-- LOCAL INFORMATION -->
+                    <!-- LOCAL INFORMATION -->
             <div class="col-sm-6">
                 <div class="well">
                     <h3><span class="fa fa-user"></span> Local</h3>
@@ -30,24 +29,22 @@
                             <strong>email</strong>: <%= user.local.email %><br>
                             <strong>password</strong>: <%= user.local.password %>
                         </p>
-                        
-                    <% } else { %>
-                    <% } %>
+                                            <% } %>
 
                 </div>
             </div>
-
-            
-        </div>
-
+            </div>
         <div class="row">
-            
             <!-- Token Authentication Block -->
             <div class="col-sm-6">
                 <div class="well">
                     <h3 class="text-warning"><span class="fa fa-cogs"></span> API Token</h3>
                     <p>
-                        <strong>Token</strong>: <%= user._id %><br>
+                        <% if (user.token) { %>
+                            <strong>Token</strong>: <%= user.token.value %><br>
+                        <% } else { %>
+                            <a href="/getToken" class="btn btn-warning">Get Token</a>
+                        <% } %>
                     </p>
 
                 </div>

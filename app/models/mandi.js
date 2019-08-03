@@ -1,47 +1,100 @@
-// load the things we need
 var mongoose = require('mongoose');
+var MandiSchema = require('../schemas/mandi');
 
-var Contact = require('../models/contact');
-var Crop = require('../models/crop');
-var Schema = mongoose.Schema;
+var Mandi = mongoose.model('Mandi', MandiSchema);
+var queryParams = MandiSchema._queryParams;
 
-// define the schema for mandi model
-var mandiSchema = mongoose.Schema({
-
-    name        : {type: String, trim: true},
-    contact     : {type: Schema.Types.ObjectId, ref: 'Contact' },
-    crop        : [{ type: Schema.Types.ObjectId, ref: 'Crop'}, {
-          price : { type: Number, get: getPrice, set: setPrice } // database unit is paise
-    }],
-    address 	: { 
-            name        : {type: String, required: true, trim: true},
-            type        : {type: String, required: true, enum: ['village', 'town', 'city']},
-            locality    : {type: String, trim: true},
-            district    : {type: String, trim: true},
-            state       : {type: String, required: true, default: 'Madhya Pradesh', enum: ['Delhi', 'Madhya Pradesh', 'Maharashtra', 'Karnataka']},
-            country     : {type: String, required: true, default: 'India', enum: ['India', 'Bangaldesh']},
-            pin         : {type: String, required: true, trim: true}
-            } 
-},
-{
-	timestamps: true
-});
-
-// methods ======================
-mandiSchema.methods.addContact = function(contact_id){
-	Contact.findById(contact_id, function (err, val){
-                if (err)
-                    res.send(err);;
-                this.contact = val;
-            });
+function execQuery(query, callback) {
+    query.select(queryParams.select)
+        .populate(queryParams.populate)
+        .exec(callback);
 }
 
-function getPrice(num){
-    return (num/100).toFixed(2);
+function _findRaw(attrs, callback) {
+    Mandi.find(attrs || {}).exec(callback);
 }
 
-function setPrice (num){
-    return num*100;
+function _find(attrs, callback) {
+    var query = Mandi.find(attrs || {});
+    execQuery(query, callback);
 }
-// create the model for Mandi and expose it to the app
-module.exports = mongoose.model('Mandi', mandiSchema);
+
+function _findOne(attrs, callback) {
+    var query = Mandi.findOne(attrs || {});
+    execQuery(query, callback);
+}
+
+function _findByAttributes(attrs, callback) {
+    _find(attrs, function (error, mandis) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, mandis);
+    })
+}
+
+function findAll(callback) {
+    _find({}, function (error, mandis) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, mandis);
+    });
+}
+
+function findById(id, callback) {
+    _findOne({ _id: id }, function (error, mandi) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, mandi);
+    });
+}
+
+function create(attrs, callback) {
+    // Here you can validate and sanitize 'attrs' before creating
+    Mandi.create(attrs, function (error, mandi) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, mandi);
+    });
+}
+
+function update(id, attrs, callback) {
+    // Here you can validate and sanitize 'attrs' before updating
+    Mandi.update({ _id: id }, attrs, function (error, rawMessage) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null, rawMessage);
+    });
+}
+
+function remove(id, callback) {
+    Mandi.remove({ _id: id }, function (error) {
+        if (error) {
+            return handleError(error, callback);
+        }
+
+        callback(null);
+    });
+}
+
+function handleError(error, callback) {
+    // Here you can use some Logger module or create your own to log errors
+    callback(error);
+}
+
+module.exports = {
+    findAll: findAll,
+    findById: findById,
+    create: create,
+    update: update,
+    remove: remove
+};

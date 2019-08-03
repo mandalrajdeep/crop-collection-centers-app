@@ -4,8 +4,8 @@ var BearerStrategy = require('passport-http-bearer').Strategy;
 //var ExtractJwt = require('passport-jwt').ExtractJwt;
 //var config = require('./auth');
 
-var User             = require('../app/models/user').User;
-var Token            = require('../app/models/user').Token;
+var User             = require('../app/schemas/user').User;
+var Token            = require('../app/schemas/user').Token;
 
 module.exports = function(passport) {
 
@@ -25,7 +25,6 @@ module.exports = function(passport) {
 		passReqToCallback: true
 	},
 	function(req, email, password, done){
-		console.log(req.body);
 		process.nextTick(function(){
 			User.findOne({'local.username': email}, function(err, user){
 				if(err)

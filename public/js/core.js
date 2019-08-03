@@ -11,52 +11,52 @@
     $stateProvider
     .state("main", {
         url:'/main',
-        templateUrl: '../partials/mainview.html',
+        templateUrl: '../public/views/mainvw.html',
         controller: 'mainController'
       })
     .state("projectmgmt", {
         url:'/projectmgmt',
-        templateUrl: '../partials/project.html',
+        templateUrl: '../public/views/projectmgmt.html',
         controller: 'projectController'
       })
     .state("projectmgmt.mandi", {
         url:'/mandi',
-        templateUrl: '../partials/project-mandi.html',
+        templateUrl: '../public/views/projectmgmt-mandi.html',
         controller: 'projectMandiController'
       })
     .state("projectmgmt.crop", {
         url:'/crop',
-        templateUrl: '../partials/project-crop.html',
+        templateUrl: '../public/views/projectmgmt-crop.html',
         controller: 'projectController'
       })
     .state("projectmgmt.contact", {
         url:'/contact',
-        templateUrl: '../partials/project-contact.html',
+        templateUrl: '../public/views/projectmgmt-contact.html',
         controller: 'projectContactController'
       })
     .state("cropdetails", {
         url:'/cropdetails',
-        templateUrl: '../partials/project-cropdetails.html',
+        templateUrl: '../public/views/projectmgmt-cropdetails.html',
         controller: 'cropDetailsController'
       })
     .state("addcrop", {
         url:'/addcrop',
-        templateUrl: '../partials/project-addcrop.html',
+        templateUrl: '../public/views/projectmgmt-addcrop.html',
         controller: 'addCropController'
       })
     .state("editcrop", {
         url:'/editcrop',
-        templateUrl: '../partials/project-editcrop.html',
+        templateUrl: '../public/views/projectmgmt-editcrop.html',
         controller: 'editCropController'
       })
     .state("mandi", {
         url:'/mandi',
-        templateUrl: '../partials/mandi.html',
+        templateUrl: '../public/views/mandi.html',
         controller: 'mandiController'
       })
     .state("sales", {
         url:'/sales',
-        templateUrl: '../partials/salesMain.html',
+        templateUrl: '../public/views/salesMain.html',
         controller: 'salesController'
       });
 

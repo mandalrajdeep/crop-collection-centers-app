@@ -1,75 +1,69 @@
 var fs = require('fs');
-
-var User = require('../models/user').User;
-var Token = require('../models/user').Token;
 var Mandi = require('../models/mandi');
-var Contact = require('../models/contact');
 
-//var Roles = require('../config/roles.js');
+function init(router, passport) {
+    router.get('/', findAll);
+    router.get('/:id', findById);
+    router.post('/', create);
+    router.put('/:id', update);
+    router.delete('/:id', remove);
+}
 
-// URL localhost:8080/mandi/
-module.exports = function(router, passport){
+function findAll(request, response, next) {
+    Mandi.findAll(function (error, mandis) {
+        if (error) {
+            return response.send(error);
+        }
 
-        // fetch all Mandis by mandi/
-        router.get('/', function(req, res) {
-            Mandi.find(function(err, mandis) {
-            if (err)
-                res.send(err);
-            else res.json(mandis);
-            });
-        });
+        var status = mandis.length ? 200 : 204;
+        response.status(status).json(mandis);
+    });
+}
 
-        router.post('/', function(req, res) {
+function findById(request, response, next) {
+    var id = request.params.id;
+    Mandi.findById(id, function (error, mandi) {
+        if (error) {
+            return response.send(error);
+        }
 
-            var mandi = new Mandi();      // create a new instance of the Mandi model
-            mandi.name = req.body.name;  // set the mandi name (comes from the request)
-            mandi.address.name = req.body.address.name;  // set the address  (comes from the request)
-            mandi.address.type = req.body.address.type;
-            mandi.address.locality = req.body.address.locality;
-            mandi.address.district = req.body.address.district;
-            mandi.address.state = req.body.address.state;
-            mandi.address.country = req.body.address.country;
-            mandi.address.pin = req.body.address.pin;
-            mandi.contact = new Contact();
-            mandi.addContact(req.body.contact._id);
-            mandi.save(function(err) {
-                if (err)
-                    res.send(err);
-            });
-            // mandi.contact = "LALA";
-            // mandi.contact = Contact.findById(req.body.contact._id, function (err, person){
-            //     if (err)
-            //         res.send(err);
-            //     return person._id;
-            // });
-            // var contacts = req.body.contact;
-            // for (var contact in contacts) {
-            //     mandi.contact.push(Contact.findById(contacts[contact]._id), function(err){
-            //         if (errr)
-            //             res.send(err);
-            //         console.log(mandi)
-            //     })
+        var status = (mandi && mandi._id) ? 200 : 204;
+        response.status(status).json(mandi);
+    });
+}
 
-            //     console.log(contacts[contact]._id);
-            //     Contact.findById(contacts[contact]._id, function(err, person){
-            //         if (err)
-            //             res.send(err);
-            //         else mandi.contact.push(person, function(err){
-            //             if (err) {
-            //                 console.log('Fail');
-            //                 res.send(err);
-            //             } MyClass.findById(req.params.id)
-            //         });
-            //     })
-            // }
-            console.log(mandi);
+function create(request, response, next) {
+    var attrs = request.body;
+    Mandi.create(attrs, function (error, mandi) {
+        if (error) {
+            return response.send(error);
+        }
 
-            // mandi.save(function(err) {
-            //     if (err)
-            //         res.send(err);
-            //     else res.json({ message: 'Mandi added!' });
-            // });
+        response.status(201).json('Object creation successful.');
+    });
+}
 
-            // save the mandi and check for errors
-        });
-};
+function update(request, response, next) {
+    var id = request.params.id,
+        attrs = request.body;
+    Mandi.update(id, attrs, function (error, rawMessage) {
+        if (error) {
+            return response.send(error);
+        }
+
+        response.status(200).json('Object updation successful');
+    });
+}
+
+function remove(request, response, next) {
+    var id = request.params.id;
+    Mandi.remove(id, function (error) {
+        if (error) {
+            return response.send(error);
+        }
+
+        response.status(200).json('Object deletion successful');
+    });
+}
+
+module.exports = init;
